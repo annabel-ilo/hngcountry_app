@@ -2,4 +2,4 @@
 
 ## More Info on the app to be updated soon
 
-- [AppittzerLink](https://docs.flutter.dev/get-started/codelab)
+- [AppittzerLink](https://appetize.io/app/nlymedbgpluwkallwp4soettym?device=pixel4&osVersion=11.0&scale=75)
