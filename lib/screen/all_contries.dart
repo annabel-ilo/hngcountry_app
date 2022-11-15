@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import '../const/model/provider/country_provider.dart';
 import 'country_details.dart';
 
 class AllCountries extends StatefulWidget {
@@ -11,7 +15,15 @@ class AllCountries extends StatefulWidget {
 
 class _AllCountriesState extends State<AllCountries> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<CountryProvider>(context, listen: false).getCountriesItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final countriesDits = Provider.of<CountryProvider>(context);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 14, 7, 45),
       appBar: AppBar(
@@ -97,37 +109,41 @@ class _AllCountriesState extends State<AllCountries> {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.5,
-                child: ListView.builder(
-                    itemCount: 100,
-                    itemBuilder: (context, index) {
-                      return TextButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => const CountryDetails()),
-                        ),
-                        child: const ListTile(
-                          leading:
-                              Icon(Icons.ac_unit_outlined, color: Colors.white),
-                          title: Text(
-                            'Country Name',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                child: Consumer<CountryProvider>(
+                    builder: (BuildContext context, value, _) {
+                  return ListView.builder(
+                      itemCount: value.getAllCountries.length,
+                      itemBuilder: (context, index) {
+                        final item = value.getAllCountries[index];
+                        return TextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const CountryDetails()),
+                          ),
+                          child: ListTile(
+                            leading: Icon(Icons.ac_unit_outlined,
+                                color: Colors.white),
+                            title: Text(
+                              value.getAllCountries[index].cca2,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            subtitle: Text(
+                              item.capital!.first,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          subtitle: Text(
-                            'Country CApital',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                        );
+                      });
+                }),
               ),
             ],
           ),
